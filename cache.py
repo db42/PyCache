@@ -70,7 +70,7 @@ def main():
     print value
     
     #doesn't return anything
-    cache.endRead("key2")
+    cache.endRead("key1")
     
     return
 

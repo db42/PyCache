@@ -28,9 +28,13 @@ value =  cache.beginRead("key1")
 print value
 
 #doesn not return anything
-cache.endRead("key2")
+cache.endRead("key1")
 
 return
+```
+Or, just run
+```
+python cache.py
 ```
 
 ### Testing
