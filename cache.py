@@ -58,6 +58,7 @@ class Cache(object):
         return keys[0]
     
 def main():
+    #cache of entries size = 10
     cache = Cache(size = 10)
     
     #basic write operation
@@ -65,7 +66,10 @@ def main():
     cache.write("key2", "value2")
     
     #basic read operation
-    print cache.beginRead("key3")
+    value =  cache.beginRead("key1")
+    print value
+    
+    #doesn't return anything
     cache.endRead("key2")
     
     return
