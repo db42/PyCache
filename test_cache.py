@@ -20,14 +20,14 @@ class TestCache():
         
         #beginRead: read key not present
         try:
-            self.cache.beginRead("key_not_found")
+            self.cache.beginRead("key_not_present")
             assert False
         except:
             assert True
             
         #endRead: read key not present
         try:
-            self.cache.endRead("key_not_found")
+            self.cache.endRead("key_not_present")
             assert False
         except:
             assert True
@@ -50,6 +50,7 @@ class TestCache():
         
         
     def test_size(self):
+        """ size of hash_db should never exceed specified size of cache """
         #size
         for i in range(TEST_SIZE):
             self.cache.write(i, i)
