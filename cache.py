@@ -5,14 +5,21 @@ Created on 15-Mar-2012
 '''
 
 class Elem(object):
-    """ This class corresponds to element of Cache """
-    NOT_READY = 0
-    READY_EVICT = 1
+    """ This class corresponds to element of Cache. Can be further modified to extend this cache """
     
     def __init__(self, value):
         self.value = value
-        self.evict_status = Elem.READY_EVICT
+        self.evict_status = True #Ready to evict
 
+    def getValue(self):
+        return self.value
+    
+    def setEvictStatus(self, status):
+        self.evict_status = status
+    
+    def getEvictStatus(self):
+        return self.evict_status
+    
 class Cache(object):
     """ Base class for Cache object """
     def __init__(self, size):
@@ -21,19 +28,19 @@ class Cache(object):
         
     def beginRead(self, key):
         """ Return the value corresponding to key from the cache. If key is not present, throws exception"""
-        try:
+        if self.hash_db.has_key(key):
             elem = self.hash_db[key]
-        except KeyError:
-            raise Exception("KeyNotFoundError")
-        elem.evict_status = Elem.NOT_READY
-        return elem.value
+        else:
+            raise LookupError
+        elem.setEvictStatus(False)
+        return elem.getValue()
     
     def endRead(self, key):
         """ Return None. If key is not present, throws exception. Now, entry corresponding to key can be evicted from the cache """
-        try:
-            self.hash_db[key].evict_status = Elem.READY_EVICT
-        except KeyError:
-            raise Exception("KeyNotFoundError")
+        if self.hash_db.has_key(key):
+            self.hash_db[key].setEvictStatus(True)
+        else:
+            raise LookupError
         return
     
     def write(self, key, value):
@@ -45,7 +52,7 @@ class Cache(object):
             self.__evictEntry()
     
     def __evictEntry(self):
-        keys = [key for key in self.hash_db.keys() if self.hash_db[key].evict_status]
+        keys = [key for key in self.hash_db.keys() if self.hash_db[key].getEvictStatus()]
         key = Cache.__findEntryToEvict(keys)
 
         #evict
